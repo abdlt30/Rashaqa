@@ -2086,15 +2086,6 @@ if (loginBtn) {
     });
 }
 
-  // ✅ الربط الصحيح للزر (يعمل في الأندرويد)
-  var loginBtn = document.getElementById('loginBtn');
-  if (loginBtn) {
-      loginBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          Auth.login();
-      });
-  }
-
   if (!sb) { Auth.showAuth(); return; }
   Auth.check().finally(function () { console.log('🎉 Ready'); });
 }

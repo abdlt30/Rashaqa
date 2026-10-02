@@ -17,7 +17,7 @@ html,body{width:100%;overflow-x:hidden;background:var(--bg);color:var(--text);mi
 body{padding-bottom:calc(90px + var(--sb));background:radial-gradient(circle at 20% 0%,rgba(139,92,246,.15),transparent 50%),radial-gradient(circle at 80% 100%,rgba(236,72,153,.12),transparent 50%)}
 .hide{display:none!important}
 #splash{position:fixed;inset:0;z-index:99999;background:#0A0E1A;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s;animation:splashForceHide 1s ease-in-out 5s forwards}
-@keyframes splashForceHide{0%{opacity:1;pointer-events:auto}99%{opacity:0;pointer-events:none}100%{opacity:0;pointer-events:none;display:none}}
+@keyframes splashForceHide{0%{opacity:1}99%{opacity:0;pointer-events:none}100%{opacity:0;pointer-events:none;display:none}}
 #splash.out{opacity:0;pointer-events:none}
 .sp-logo{width:110px;height:110px;border-radius:32px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:52px;color:#fff;box-shadow:0 25px 60px -10px rgba(139,92,246,.7);animation:sp 2s ease-in-out infinite}
 @keyframes sp{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
@@ -324,14 +324,14 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
 <div class="ptr" id="ptr"><i class="fas fa-arrow-down"></i></div>
 <div id="toasts"></div>
 
-<div id="auth" >
+<div id="auth" class="hide">
   <div class="card">
     <div class="logo"><i class="fas fa-utensils"></i></div>
     <h1>رشاقة</h1>
     <p>رفيقك العربي الذكي للصحة والتغذية</p>
     <div class="inp-g"><label>البريد الإلكتروني</label><input type="email" id="email" placeholder="example@mail.com"></div>
     <div class="inp-g"><label>كلمة المرور</label><input type="password" id="password" placeholder="••••••••"></div>
-    <button type="button" class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
+    <button type="button" class="btn" id="loginBtn" onclick="triggerLogin()"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
     <button class="btn btn-g" onclick="Auth.register()" style="margin-top:10px"><i class="fas fa-user-plus"></i> إنشاء حساب</button>
   </div>
 </div>
@@ -619,15 +619,7 @@ function killSplash() {
 }
 setTimeout(killSplash, 3000);
 window.addEventListener('load', function () { setTimeout(killSplash, 1000); });
-window.onerror = function (m, s, l, c, e) {
-  console.error('❌ Error:', m, 'at', s, l + ':' + c);
-  killSplash();
-  var auth = document.getElementById('auth');
-  var app = document.getElementById('app');
-  if (auth) auth.classList.remove('hide');
-  if (app) app.classList.add('hide');
-  return true;
-};
+window.onerror = function() { killSplash(); return true; };
 try {
   if (typeof supabase !== 'undefined' && supabase.createClient) {
     sb = supabase.createClient(CONFIG.SB_URL, CONFIG.SB_KEY, {
@@ -688,41 +680,21 @@ var Auth = {
   },
   showAuth: function () { show('auth'); hide('onb'); hide('app'); },
   login: function () {
-  // اختبار مرئي للتأكد من أن الزر يعمل
-  alert('جاري محاولة تسجيل الدخول...');
-  
-  // التحقق من تهيئة Supabase
-  if (typeof sb === 'undefined' || !sb) {
-    alert('خطأ: لم يتم الاتصال بالخادم. تأكد من الإنترنت وأعد فتح التطبيق.');
-    return;
-  }
-  
-  // التحقق من الاتصال بالإنترنت
-  if (!navigator.onLine) { toast('لا يوجد اتصال بالإنترنت', 'error'); return; }
-  
-  var email = $('email').value.trim(), pass = $('password').value;
-  if (!email || !pass) { toast('أدخل البريد وكلمة المرور', 'error'); return; }
-  
-  var b = $('loginBtn'); 
-  b.disabled = true;
-  b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...';
-  
-  sb.auth.signInWithPassword({ email: email, password: pass })
-    .then(function (r) {
-      if (r.error) throw r.error;
-      user = r.data.user;
-      toast('تم تسجيل الدخول بنجاح');
-      App.enter();
-    })
-    .catch(function (e) { 
-      console.error(e);
-      alert('فشل الدخول: ' + (e.message || 'البريد أو كلمة المرور غير صحيحة'));
-    })
-    .finally(function () { 
-      b.disabled = false; 
-      b.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; 
-    });
-},
+    if (!navigator.onLine) { toast('لا يوجد اتصال', 'error'); return; }
+    var email = $('email').value.trim(), pass = $('password').value;
+    if (!email || !pass) { toast('أدخل البريد وكلمة المرور', 'error'); return; }
+    var b = $('loginBtn'); b.disabled = true;
+    b.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    sb.auth.signInWithPassword({ email: email, password: pass })
+      .then(function (r) {
+        if (r.error) throw r.error;
+        user = r.data.user;
+        toast('تم تسجيل الدخول');
+        App.enter();
+      })
+      .catch(function (e) { toast(e.message || 'خطأ', 'error'); })
+      .finally(function () { b.disabled = false; b.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; });
+  },
   register: function () {
     if (!navigator.onLine) { toast('لا يوجد اتصال', 'error'); return; }
     var email = $('email').value.trim(), pass = $('password').value;
@@ -2065,36 +2037,29 @@ document.body.addEventListener('touchend', function () {
   pp = 0;
 }, { passive: true });
 
-// ❌ تم إلغاء Service Worker نهائياً لمنع تحميل النسخ القديمة من الكاش
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    for (var i = 0; i < registrations.length; i++) {
-      registrations[i].unregister();
-      console.log('✅ تم إلغاء تسجيل Service Worker القديم');
-    }
-  });
+// Service Worker
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  try {
+    var swCode = "const C='rashaqa-v15-1-4';self.addEventListener('install',function(e){self.skipWaiting()});self.addEventListener('activate',function(e){e.waitUntil(clients.claim())});self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){if(res.ok){var cl=res.clone();caches.open(C).then(function(c){c.put(e.request,cl)})}return res}).catch(function(){return caches.match('./')})}))});";
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }))).catch(function () {});
+  } catch (e) {}
 }
 
 // Boot
 function boot() {
-  document.body.innerHTML = '<div style="color:#fff;padding:50px;text-align:center;font-size:20px">🚀 جاري التحميل... (إذا بقيت هذه الشاشة، فهناك خطأ)</div>';
-  console.log('🚀 Boot V15.1.5');
+  // ✅ الربط الصحيح للزر (يعمل في الأندرويد)
+var loginBtn = document.getElementById('loginBtn');
+if (loginBtn) {
+    var newBtn = loginBtn.cloneNode(true);
+    loginBtn.parentNode.replaceChild(newBtn, loginBtn);
+    newBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.triggerLogin();
+    });
+  }
+  console.log('🚀 Boot V15.1.4');
   killSplash();
   setTimeout(killSplash, 1500);
-
-  // ✅ الربط الصحيح للزر (يعمل في الأندرويد)
-  var loginBtn = document.getElementById('loginBtn');
-  if (loginBtn) {
-      // استخدام cloneNode لمنع التكرار في حال إعادة التحميل
-      var newBtn = loginBtn.cloneNode(true);
-      loginBtn.parentNode.replaceChild(newBtn, loginBtn);
-      
-      newBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          window.triggerLogin(); // استدعاء الدالة الوسيطة
-      });
-  }
-
   if (!sb) { Auth.showAuth(); return; }
   Auth.check().finally(function () { console.log('🎉 Ready'); });
 }
@@ -2118,7 +2083,7 @@ window.triggerLogin = function() {
     }
     
     var btn = document.getElementById('loginBtn');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...'; }
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...'; }
     
     sb.auth.signInWithPassword({ email: email, password: pass })
       .then(function (r) {
@@ -2133,8 +2098,8 @@ window.triggerLogin = function() {
       .finally(function () { 
         if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; }
       });
-};
-    
+};  
+
 window.Nav = Nav;
 window.Auth = Auth;
 window.Onb = Onb;
@@ -2157,25 +2122,10 @@ if (document.readyState === 'loading') {
 window.onerror = function (m, s, l, c, e) {
   console.error('❌ Error:', m, 'at', s, l + ':' + c);
   killSplash();
-  var auth = document.getElementById('auth');
-  var app = document.getElementById('app');
-  if (auth) auth.classList.remove('hide');
-  if (app) app.classList.add('hide');
   return true;
 };
 
 console.log('%c💎 رشاقة V15.1.4 — Surgical Edits Build', 'color:#8B5CF6;font-weight:900;font-size:14px;padding:8px;background:#F5F3FF;border-radius:8px');
-  // شبكة الأمان النهائية لمنع الشاشة السوداء
-setTimeout(function() {
-    var splash = document.getElementById('splash');
-    var auth = document.getElementById('auth');
-    var app = document.getElementById('app');
-    if (splash) splash.style.display = 'none';
-    if (auth && auth.classList.contains('hide') && app && app.classList.contains('hide')) {
-        console.log("🚨 التطبيق عالق، جاري إظهار شاشة الدخول قسرياً...");
-        auth.classList.remove('hide');
-    }
-}, 6000);
 </script>
 </body>
 </html>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Rashaqa</string>
+    <string name="title_activity_main">Rashaqa</string>
+    <string name="package_name">com.rashaqa.app</string>
+    <string name="custom_url_scheme">com.rashaqa.app</string>
+</resources>

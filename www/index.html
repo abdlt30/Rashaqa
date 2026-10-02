@@ -615,9 +615,9 @@ function killSplash() {
   if (s) s.classList.add('out');
   setTimeout(function () { if (s) s.style.display = 'none'; }, 600);
 }
-setTimeout(killSplash, 1500);
-window.addEventListener('load', function () { setTimeout(killSplash, 800); });
-
+setTimeout(killSplash, 3000);
+window.addEventListener('load', function () { setTimeout(killSplash, 1000); });
+window.onerror = function() { killSplash(); return true; };
 try {
   if (typeof supabase !== 'undefined' && supabase.createClient) {
     sb = supabase.createClient(CONFIG.SB_URL, CONFIG.SB_KEY, {

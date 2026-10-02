@@ -331,7 +331,7 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
     <p>رفيقك العربي الذكي للصحة والتغذية</p>
     <div class="inp-g"><label>البريد الإلكتروني</label><input type="email" id="email" placeholder="example@mail.com"></div>
     <div class="inp-g"><label>كلمة المرور</label><input type="password" id="password" placeholder="••••••••"></div>
-    <button class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
+    <button type="button" class="btn" id="loginBtn" onclick="triggerLogin()"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
     <button class="btn btn-g" onclick="Auth.register()" style="margin-top:10px"><i class="fas fa-user-plus"></i> إنشاء حساب</button>
   </div>
 </div>
@@ -2078,18 +2078,49 @@ function boot() {
   killSplash();
   setTimeout(killSplash, 1500);
   // ✅ الربط الصحيح للزر (يعمل في الأندرويد)
-var loginBtn = document.getElementById('loginBtn');
-if (loginBtn) {
-    loginBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        Auth.login();
-    });
-}
 
   if (!sb) { Auth.showAuth(); return; }
   Auth.check().finally(function () { console.log('🎉 Ready'); });
 }
-
+// ✅ دالة وسيطة لضمان عمل الزر في تطبيق الأندرويد
+window.triggerLogin = function() {
+    alert('✅ الزر يعمل! جاري محاولة تسجيل الدخول...');
+    
+    // التحقق من تهيئة الخادم
+    if (typeof sb === 'undefined' || !sb) {
+        alert('❌ خطأ: الاتصال بالخادم غير مهيأ. تأكد من الإنترنت.');
+        return;
+    }
+    
+    // التحقق من المدخلات
+    var emailEl = document.getElementById('email');
+    var passEl = document.getElementById('password');
+    var email = emailEl ? emailEl.value.trim() : '';
+    var pass = passEl ? passEl.value : '';
+    
+    if (!email || !pass) {
+        alert('❌ خطأ: يرجى إدخال البريد الإلكتروني وكلمة المرور.');
+        return;
+    }
+    
+    // تنفيذ تسجيل الدخول مباشرة
+    var btn = document.getElementById('loginBtn');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...'; }
+    
+    sb.auth.signInWithPassword({ email: email, password: pass })
+      .then(function (r) {
+        if (r.error) throw r.error;
+        alert('✅ تم تسجيل الدخول بنجاح!');
+        window.user = r.data.user;
+        App.enter();
+      })
+      .catch(function (e) { 
+        alert('❌ فشل الدخول: ' + (e.message || 'البريد أو كلمة المرور غير صحيحة')); 
+      })
+      .finally(function () { 
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; }
+      });
+};
 window.Nav = Nav;
 window.Auth = Auth;
 window.Onb = Onb;

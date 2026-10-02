@@ -687,21 +687,41 @@ var Auth = {
   },
   showAuth: function () { show('auth'); hide('onb'); hide('app'); },
   login: function () {
-    if (!navigator.onLine) { toast('لا يوجد اتصال', 'error'); return; }
-    var email = $('email').value.trim(), pass = $('password').value;
-    if (!email || !pass) { toast('أدخل البريد وكلمة المرور', 'error'); return; }
-    var b = $('loginBtn'); b.disabled = true;
-    b.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    sb.auth.signInWithPassword({ email: email, password: pass })
-      .then(function (r) {
-        if (r.error) throw r.error;
-        user = r.data.user;
-        toast('تم تسجيل الدخول');
-        App.enter();
-      })
-      .catch(function (e) { toast(e.message || 'خطأ', 'error'); })
-      .finally(function () { b.disabled = false; b.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; });
-  },
+  // اختبار مرئي للتأكد من أن الزر يعمل
+  alert('جاري محاولة تسجيل الدخول...');
+  
+  // التحقق من تهيئة Supabase
+  if (typeof sb === 'undefined' || !sb) {
+    alert('خطأ: لم يتم الاتصال بالخادم. تأكد من الإنترنت وأعد فتح التطبيق.');
+    return;
+  }
+  
+  // التحقق من الاتصال بالإنترنت
+  if (!navigator.onLine) { toast('لا يوجد اتصال بالإنترنت', 'error'); return; }
+  
+  var email = $('email').value.trim(), pass = $('password').value;
+  if (!email || !pass) { toast('أدخل البريد وكلمة المرور', 'error'); return; }
+  
+  var b = $('loginBtn'); 
+  b.disabled = true;
+  b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...';
+  
+  sb.auth.signInWithPassword({ email: email, password: pass })
+    .then(function (r) {
+      if (r.error) throw r.error;
+      user = r.data.user;
+      toast('تم تسجيل الدخول بنجاح');
+      App.enter();
+    })
+    .catch(function (e) { 
+      console.error(e);
+      alert('فشل الدخول: ' + (e.message || 'البريد أو كلمة المرور غير صحيحة'));
+    })
+    .finally(function () { 
+      b.disabled = false; 
+      b.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; 
+    });
+},
   register: function () {
     if (!navigator.onLine) { toast('لا يوجد اتصال', 'error'); return; }
     var email = $('email').value.trim(), pass = $('password').value;

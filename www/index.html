@@ -618,7 +618,15 @@ function killSplash() {
 }
 setTimeout(killSplash, 3000);
 window.addEventListener('load', function () { setTimeout(killSplash, 1000); });
-window.onerror = function() { killSplash(); return true; };
+window.onerror = function (m, s, l, c, e) {
+  console.error('❌ Error:', m, 'at', s, l + ':' + c);
+  killSplash();
+  var auth = document.getElementById('auth');
+  var app = document.getElementById('app');
+  if (auth) auth.classList.remove('hide');
+  if (app) app.classList.add('hide');
+  return true;
+};
 try {
   if (typeof supabase !== 'undefined' && supabase.createClient) {
     sb = supabase.createClient(CONFIG.SB_URL, CONFIG.SB_KEY, {
@@ -2075,10 +2083,25 @@ if (document.readyState === 'loading') {
 window.onerror = function (m, s, l, c, e) {
   console.error('❌ Error:', m, 'at', s, l + ':' + c);
   killSplash();
+  var auth = document.getElementById('auth');
+  var app = document.getElementById('app');
+  if (auth) auth.classList.remove('hide');
+  if (app) app.classList.add('hide');
   return true;
 };
 
 console.log('%c💎 رشاقة V15.1.4 — Surgical Edits Build', 'color:#8B5CF6;font-weight:900;font-size:14px;padding:8px;background:#F5F3FF;border-radius:8px');
+  // شبكة الأمان النهائية لمنع الشاشة السوداء
+setTimeout(function() {
+    var splash = document.getElementById('splash');
+    var auth = document.getElementById('auth');
+    var app = document.getElementById('app');
+    if (splash) splash.style.display = 'none';
+    if (auth && auth.classList.contains('hide') && app && app.classList.contains('hide')) {
+        console.log("🚨 التطبيق عالق، جاري إظهار شاشة الدخول قسرياً...");
+        auth.classList.remove('hide');
+    }
+}, 6000);
 </script>
 </body>
 </html>

@@ -2064,17 +2064,20 @@ document.body.addEventListener('touchend', function () {
   pp = 0;
 }, { passive: true });
 
-// Service Worker
-if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-  try {
-    var swCode = "const C='rashaqa-v15-1-4';self.addEventListener('install',function(e){self.skipWaiting()});self.addEventListener('activate',function(e){e.waitUntil(clients.claim())});self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){if(res.ok){var cl=res.clone();caches.open(C).then(function(c){c.put(e.request,cl)})}return res}).catch(function(){return caches.match('./')})}))});";
-    navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }))).catch(function () {});
-  } catch (e) {}
+// ❌ تم إلغاء Service Worker نهائياً لمنع تحميل النسخ القديمة من الكاش
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (var i = 0; i < registrations.length; i++) {
+      registrations[i].unregister();
+      console.log('✅ تم إلغاء تسجيل Service Worker القديم');
+    }
+  });
 }
 
 // Boot
 function boot() {
-  console.log('🚀 Boot V15.1.4');
+  document.body.innerHTML = '<div style="color:#fff;padding:50px;text-align:center;font-size:20px">🚀 جاري التحميل... (إذا بقيت هذه الشاشة، فهناك خطأ)</div>';
+  console.log('🚀 Boot V15.1.5');
   killSplash();
   setTimeout(killSplash, 1500);
 

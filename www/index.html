@@ -331,7 +331,7 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
     <p>رفيقك العربي الذكي للصحة والتغذية</p>
     <div class="inp-g"><label>البريد الإلكتروني</label><input type="email" id="email" placeholder="example@mail.com"></div>
     <div class="inp-g"><label>كلمة المرور</label><input type="password" id="password" placeholder="••••••••"></div>
-    <button type="button" class="btn" id="loginBtn" onclick="triggerLogin()"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
+    <button type="button" class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
     <button class="btn btn-g" onclick="Auth.register()" style="margin-top:10px"><i class="fas fa-user-plus"></i> إنشاء حساب</button>
   </div>
 </div>
@@ -2077,50 +2077,60 @@ function boot() {
   console.log('🚀 Boot V15.1.4');
   killSplash();
   setTimeout(killSplash, 1500);
+
   // ✅ الربط الصحيح للزر (يعمل في الأندرويد)
+  var loginBtn = document.getElementById('loginBtn');
+  if (loginBtn) {
+      // استخدام cloneNode لمنع التكرار في حال إعادة التحميل
+      var newBtn = loginBtn.cloneNode(true);
+      loginBtn.parentNode.replaceChild(newBtn, loginBtn);
+      
+      newBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.triggerLogin(); // استدعاء الدالة الوسيطة
+      });
+  }
 
   if (!sb) { Auth.showAuth(); return; }
   Auth.check().finally(function () { console.log('🎉 Ready'); });
 }
 // ✅ دالة وسيطة لضمان عمل الزر في تطبيق الأندرويد
 window.triggerLogin = function() {
-    alert('✅ الزر يعمل! جاري محاولة تسجيل الدخول...');
+    toast('✅ الزر يعمل! جاري محاولة تسجيل الدخول...', 'info');
     
-    // التحقق من تهيئة الخادم
     if (typeof sb === 'undefined' || !sb) {
-        alert('❌ خطأ: الاتصال بالخادم غير مهيأ. تأكد من الإنترنت.');
+        toast('❌ خطأ: الاتصال بالخادم غير مهيأ.', 'error');
         return;
     }
     
-    // التحقق من المدخلات
     var emailEl = document.getElementById('email');
     var passEl = document.getElementById('password');
     var email = emailEl ? emailEl.value.trim() : '';
     var pass = passEl ? passEl.value : '';
     
     if (!email || !pass) {
-        alert('❌ خطأ: يرجى إدخال البريد الإلكتروني وكلمة المرور.');
+        toast('❌ يرجى إدخال البريد وكلمة المرور.', 'error');
         return;
     }
     
-    // تنفيذ تسجيل الدخول مباشرة
     var btn = document.getElementById('loginBtn');
     if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...'; }
     
     sb.auth.signInWithPassword({ email: email, password: pass })
       .then(function (r) {
         if (r.error) throw r.error;
-        alert('✅ تم تسجيل الدخول بنجاح!');
+        toast('✅ تم تسجيل الدخول بنجاح!', 'success');
         window.user = r.data.user;
         App.enter();
       })
       .catch(function (e) { 
-        alert('❌ فشل الدخول: ' + (e.message || 'البريد أو كلمة المرور غير صحيحة')); 
+        toast('❌ فشل الدخول: ' + (e.message || 'بيانات خاطئة'), 'error'); 
       })
       .finally(function () { 
         if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; }
       });
 };
+    
 window.Nav = Nav;
 window.Auth = Auth;
 window.Onb = Onb;

@@ -2077,6 +2077,24 @@ function boot() {
   console.log('🚀 Boot V15.1.4');
   killSplash();
   setTimeout(killSplash, 1500);
+  // ✅ الربط الصحيح للزر (يعمل في الأندرويد)
+var loginBtn = document.getElementById('loginBtn');
+if (loginBtn) {
+    loginBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        Auth.login();
+    });
+}
+
+  // ✅ الربط الصحيح للزر (يعمل في الأندرويد)
+  var loginBtn = document.getElementById('loginBtn');
+  if (loginBtn) {
+      loginBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          Auth.login();
+      });
+  }
+
   if (!sb) { Auth.showAuth(); return; }
   Auth.check().finally(function () { console.log('🎉 Ready'); });
 }

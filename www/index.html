@@ -16,8 +16,8 @@
 html,body{width:100%;overflow-x:hidden;background:var(--bg);color:var(--text);min-height:100vh}
 body{padding-bottom:calc(90px + var(--sb));background:radial-gradient(circle at 20% 0%,rgba(139,92,246,.15),transparent 50%),radial-gradient(circle at 80% 100%,rgba(236,72,153,.12),transparent 50%)}
 .hide{display:none!important}
-#splash{position:fixed;inset:0;z-index:99999;background:#0A0E1A;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s;animation:splashForceHide 1s ease-in-out 5s forwards}
-@keyframes splashForceHide{0%{opacity:1}99%{opacity:0;pointer-events:none}100%{opacity:0;pointer-events:none;display:none}}
+#splash{position:fixed;inset:0;z-index:99999;background:#0A0E1A;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s;animation:splashForceHide 1s ease-in-out 6s forwards}
+@keyframes splashForceHide{0%{opacity:1;pointer-events:auto}99%{opacity:0;pointer-events:none}100%{opacity:0;pointer-events:none;display:none}}
 #splash.out{opacity:0;pointer-events:none}
 .sp-logo{width:110px;height:110px;border-radius:32px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:52px;color:#fff;box-shadow:0 25px 60px -10px rgba(139,92,246,.7);animation:sp 2s ease-in-out infinite}
 @keyframes sp{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
@@ -298,15 +298,14 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
 .ptr.on{opacity:1}
 .ptr.sp i{animation:spin .8s linear infinite}
 #cmsgs{flex:1;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:10px;padding:10px 0;scroll-behavior:smooth}
-.msg-wrap{display:flex;gap:6px;align-items:flex-end;max-width:88%;animation:fu .3s;transition:opacity .3s ease,transform .3s ease,max-height .3s ease,margin .3s ease,padding .3s ease;max-height:250px;overflow:hidden}
+.msg-wrap{display:flex;gap:6px;align-items:flex-end;max-width:88%;animation:fu .3s}
 .msg-wrap.user{align-self:flex-end;flex-direction:row-reverse}
 .msg-wrap.ai{align-self:flex-start}
-.msg-wrap.removing{opacity:0;transform:scale(.9);max-height:0!important;margin:0!important;padding:0!important}
 .msg-bubble{flex:1;padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.7;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;hyphens:auto}
 .msg-wrap.user .msg-bubble{background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border-bottom-left-radius:4px}
 .msg-wrap.ai .msg-bubble{background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);color:var(--text);border-bottom-right-radius:4px}
-.msg-del{width:28px;height:28px;border-radius:50%;background:rgba(239,68,68,.15);border:none;color:#EF4444;font-size:11px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;opacity:0.4;transition:.2s}
-.msg-del:hover{opacity:1;background:rgba(239,68,68,.25);transform:scale(1.1)}
+.msg-del{width:28px;height:28px;border-radius:50%;background:rgba(239,68,68,.15);border:none;color:#EF4444;font-size:11px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;opacity:.6;transition:.2s}
+.msg-del:active{opacity:1;transform:scale(.9)}
 @media (max-width:360px){.mv{font-size:15px}.ring-v{font-size:36px}.kv{font-size:20px}.wgrid{gap:3px}.dchip{padding:8px 2px}.dchip .dn3{font-size:12px}}
 </style>
 </head>
@@ -317,7 +316,7 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
   <div class="sp-title">رشاقة</div>
   <div class="sp-sub">رفيقك العربي الذكي للصحة والتغذية</div>
   <div class="sp-load"></div>
-  <div class="sp-ver">V15.1.4 • AI POWERED</div>
+  <div class="sp-ver">V15.1.2 • AI POWERED</div>
 </div>
 
 <div id="offline"><i class="fas fa-wifi"></i> لا يوجد اتصال بالإنترنت</div>
@@ -329,10 +328,10 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
     <div class="logo"><i class="fas fa-utensils"></i></div>
     <h1>رشاقة</h1>
     <p>رفيقك العربي الذكي للصحة والتغذية</p>
-    <div class="inp-g"><label>البريد الإلكتروني</label><input type="email" id="email" placeholder="example@mail.com"></div>
-    <div class="inp-g"><label>كلمة المرور</label><input type="password" id="password" placeholder="••••••••"></div>
-    <button type="button" class="btn" id="loginBtn" onclick="triggerLogin()"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
-    <button class="btn btn-g" onclick="Auth.register()" style="margin-top:10px"><i class="fas fa-user-plus"></i> إنشاء حساب</button>
+    <div class="inp-g"><label>البريد الإلكتروني</label><input type="email" id="email" placeholder="example@mail.com" autocomplete="email"></div>
+    <div class="inp-g"><label>كلمة المرور</label><input type="password" id="password" placeholder="••••••••" autocomplete="current-password"></div>
+    <button type="button" class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
+    <button type="button" class="btn btn-g" id="registerBtn" style="margin-top:10px"><i class="fas fa-user-plus"></i> إنشاء حساب</button>
   </div>
 </div>
 
@@ -384,9 +383,9 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
     <div style="text-align:center"><div class="gbadge"><i class="fas fa-bullseye"></i> <span id="gtxt">ثبات الوزن</span></div></div>
     <div class="ringc">
       <svg viewBox="0 0 180 180">
-        <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8B5CF6"></stop><stop offset="50%" stop-color="#EC4899"></stop><stop offset="100%" stop-color="#F59E0B"></stop></linearGradient></defs>
-        <circle class="ring-bg" cx="90" cy="90" r="78"></circle>
-        <circle class="ring-f" id="ring" cx="90" cy="90" r="78"></circle>
+        <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="50%" stop-color="#EC4899"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient></defs>
+        <circle class="ring-bg" cx="90" cy="90" r="78"/>
+        <circle class="ring-f" id="ring" cx="90" cy="90" r="78"/>
       </svg>
       <div class="ring-l"><div class="ring-v" id="ringV">0</div><div class="ring-s">سعرة من <span id="ringG">2000</span></div></div>
     </div>
@@ -518,7 +517,7 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
   </div>
   <div class="ms">
     <div class="mst">معلومات</div>
-    <div class="pi" onclick="Modals.about()"><div class="pii"><i class="fas fa-info-circle"></i></div><div class="pit"><h4>حول التطبيق</h4><p>الإصدار 15.1.4</p></div><i class="fas fa-chevron-left pia"></i></div>
+    <div class="pi" onclick="Modals.about()"><div class="pii"><i class="fas fa-info-circle"></i></div><div class="pit"><h4>حول التطبيق</h4><p>الإصدار 15.1.2</p></div><i class="fas fa-chevron-left pia"></i></div>
     <div class="pi" onclick="Nav.go('privacy',null)"><div class="pii"><i class="fas fa-shield-halved"></i></div><div class="pit"><h4>سياسة الخصوصية</h4><p>كيف نحمي بياناتك</p></div><i class="fas fa-chevron-left pia"></i></div>
   </div>
   <div class="ms">
@@ -553,9 +552,8 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
 
 <script>
 'use strict';
-  alert('✅ تم تحميل السكريبت بنجاح');
 /* ═══════════════════════════════════════════════════════════
-   RASHAQA V15.1.4 — Complete Single File (Surgical Edits)
+   RASHAQA V15.1.2 — Complete Single File (Android Compatible)
    ═══════════════════════════════════════════════════════════ */
 
 var CONFIG = {
@@ -576,14 +574,17 @@ var selGoal = null, lastWeight = null, selDay = null;
 var foodDB = [], meals = [], charts = {}, aiBusy = false;
 var U = { tCal: 0, tP: 0, tC: 0, tF: 0 };
 
+/* ═══ أدوات مساعدة ═══ */
 function $(id) { return document.getElementById(id); }
 function hide(id) { var e = $(id); if (e) e.classList.add('hide'); }
 function show(id) { var e = $(id); if (e) e.classList.remove('hide'); }
+
 function haptic(s) {
   if (!navigator.vibrate) return;
   var p = { light: [10], medium: [20], success: [10, 50, 10], error: [50, 30, 50], achievement: [15, 30, 15, 30, 15] };
   try { navigator.vibrate(p[s] || p.light); } catch (e) {}
 }
+
 function toast(msg, type) {
   type = type || 'success';
   haptic(type === 'achievement' ? 'achievement' : 'light');
@@ -598,6 +599,7 @@ function toast(msg, type) {
     setTimeout(function () { t.remove(); }, 300);
   }, type === 'achievement' ? 4500 : 3000);
 }
+
 function withTimeout(p, ms, label) {
   return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error('timeout:' + (label || ''))); }, ms); })]);
 }
@@ -612,23 +614,48 @@ function dedupe(arr, keyFn) {
     return true;
   });
 }
+
 function killSplash() {
   var s = $('splash');
   if (s) s.classList.add('out');
   setTimeout(function () { if (s) s.style.display = 'none'; }, 600);
 }
-setTimeout(killSplash, 3000);
-window.addEventListener('load', function () { setTimeout(killSplash, 1000); });
-window.onerror = function() { killSplash(); return true; };
+
+/* ═══ نافذة تأكيد مخصصة (بديل confirm للأندرويد) ═══ */
+function confirmModal(title, msg, onConfirm) {
+  var m = modal('<div class="mhead"><div class="mt"><i class="fas fa-question-circle"></i> ' + title + '</div><button class="mc" onclick="closeModal()"><i class="fas fa-times"></i></button></div>' +
+    '<p style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:20px">' + msg + '</p>' +
+    '<button class="btn btn-d" id="confirmYes">تأكيد</button>' +
+    '<button class="btn btn-g" onclick="closeModal()" style="margin-top:8px">إلغاء</button>');
+  m.querySelector('#confirmYes').onclick = function () {
+    closeModal();
+    if (typeof onConfirm === 'function') onConfirm();
+  };
+}
+
+/* ═══ إلغاء أي Service Worker قديم (حرج جداً لتطبيق الأندرويد) ═══ */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function (registrations) {
+    for (var i = 0; i < registrations.length; i++) {
+      registrations[i].unregister();
+      console.log('✅ تم إلغاء Service Worker قديم');
+    }
+  }).catch(function () {});
+}
+
+/* ═══ تهيئة Supabase ═══ */
 try {
   if (typeof supabase !== 'undefined' && supabase.createClient) {
     sb = supabase.createClient(CONFIG.SB_URL, CONFIG.SB_KEY, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
     });
     console.log('✅ Supabase initialized');
+  } else {
+    console.error('❌ supabase CDN not loaded');
   }
 } catch (e) { console.error('❌ Supabase init:', e); }
 
+/* ═══ حالة الشبكة ═══ */
 function updateNet() {
   var b = $('offline'); if (!b) return;
   if (navigator.onLine) b.classList.remove('on');
@@ -637,6 +664,7 @@ function updateNet() {
 window.addEventListener('online', updateNet);
 window.addEventListener('offline', updateNet);
 
+/* ═══ التنقل ═══ */
 var Nav = {
   go: function (name, btn) {
     haptic('light');
@@ -652,6 +680,7 @@ var Nav = {
   }
 };
 
+/* ═══ نافذة منبثقة عامة ═══ */
 function modal(html) {
   document.querySelectorAll('.mo').forEach(function (m) { m.remove(); });
   var o = document.createElement('div');
@@ -666,6 +695,7 @@ function closeModal() {
   if (m) m.remove();
 }
 
+/* ═══ المصادقة ═══ */
 var Auth = {
   check: function () {
     if (!sb) { Auth.showAuth(); return Promise.resolve(); }
@@ -680,45 +710,54 @@ var Auth = {
   },
   showAuth: function () { show('auth'); hide('onb'); hide('app'); },
   login: function () {
-    if (!navigator.onLine) { toast('لا يوجد اتصال', 'error'); return; }
+    if (!navigator.onLine) { toast('لا يوجد اتصال بالإنترنت', 'error'); return; }
     var email = $('email').value.trim(), pass = $('password').value;
     if (!email || !pass) { toast('أدخل البريد وكلمة المرور', 'error'); return; }
-    var b = $('loginBtn'); b.disabled = true;
-    b.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    var b = $('loginBtn'); 
+    if (b) { b.disabled = true; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الدخول...'; }
     sb.auth.signInWithPassword({ email: email, password: pass })
       .then(function (r) {
         if (r.error) throw r.error;
         user = r.data.user;
-        toast('تم تسجيل الدخول');
+        toast('✅ تم تسجيل الدخول بنجاح', 'success');
         App.enter();
       })
-      .catch(function (e) { toast(e.message || 'خطأ', 'error'); })
-      .finally(function () { b.disabled = false; b.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; });
+      .catch(function (e) { 
+        toast('❌ ' + (e.message || 'البريد أو كلمة المرور غير صحيحة'), 'error'); 
+      })
+      .finally(function () { 
+        if (b) { b.disabled = false; b.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; }
+      });
   },
   register: function () {
     if (!navigator.onLine) { toast('لا يوجد اتصال', 'error'); return; }
     var email = $('email').value.trim(), pass = $('password').value;
     if (!email || !pass) { toast('أدخل البريد وكلمة المرور', 'error'); return; }
     if (pass.length < 6) { toast('كلمة المرور 6+ أحرف', 'error'); return; }
+    var b = $('registerBtn');
+    if (b) { b.disabled = true; b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...'; }
     sb.auth.signUp({ email: email, password: pass })
       .then(function (r) {
         if (r.error) throw r.error;
-        toast('تم إنشاء الحساب! سجل دخولك', 'info');
+        toast('✅ تم إنشاء الحساب! سجل دخولك', 'success');
       })
-      .catch(function (e) { toast(e.message || 'خطأ', 'error'); });
+      .catch(function (e) { toast('❌ ' + (e.message || 'خطأ'), 'error'); })
+      .finally(function () {
+        if (b) { b.disabled = false; b.innerHTML = '<i class="fas fa-user-plus"></i> إنشاء حساب'; }
+      });
   },
   logout: function () {
-    modal('<div class="mhead"><div class="mt"><i class="fas fa-sign-out-alt"></i> تأكيد الخروج</div><button class="mc" onclick="closeModal()"><i class="fas fa-times"></i></button></div><p style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:20px">هل تريد تسجيل الخروج؟</p><button class="btn btn-d" onclick="Auth.doLogout()">نعم</button><button class="btn btn-g" onclick="closeModal()" style="margin-top:8px">إلغاء</button>');
-  },
-  doLogout: function () {
-    sb.auth.signOut().then(function () {
-      user = null; prof = null;
-      Auth.showAuth();
-      toast('تم تسجيل الخروج', 'info');
+    confirmModal('تأكيد الخروج', 'هل تريد تسجيل الخروج من الحساب؟', function () {
+      sb.auth.signOut().then(function () {
+        user = null; prof = null;
+        Auth.showAuth();
+        toast('تم تسجيل الخروج', 'info');
+      });
     });
   }
 };
 
+/* ═══ اختيار النشاط ═══ */
 var ActivityPicker = {
   options: [
     { v: '1.2', e: '🪑', t: 'قليل الحركة', d: 'عمل مكتبي بدون رياضة' },
@@ -745,6 +784,7 @@ var ActivityPicker = {
   }
 };
 
+/* ═══ دخول التطبيق الرئيسي ═══ */
 var App = {
   enter: function () {
     hide('auth'); hide('onb'); show('app');
@@ -773,6 +813,7 @@ var App = {
   }
 };
 
+/* ═══ قاعدة البيانات ═══ */
 var Db = {
   foods: function () {
     return sb.from(CONFIG.FOOD).select('*').order('name_ar').then(function (r) {
@@ -798,6 +839,7 @@ var Db = {
   }
 };
 
+/* ═══ التحديثات المرئية ═══ */
 var Upd = {
   meals: function () {
     U.tCal = meals.reduce(function (s, m) { return s + Number(m.calories || 0); }, 0);
@@ -853,6 +895,7 @@ var Upd = {
   }
 };
 
+/* ═══ الملف الشخصي ═══ */
 var Pf = {
   load: function () {
     if (!user) return Promise.resolve();
@@ -900,6 +943,7 @@ var Pf = {
   }
 };
 
+/* ═══ الإعداد الأولي ═══ */
 var Onb = {
   start: function () {
     show('onb'); hide('app'); hide('auth');
@@ -1020,6 +1064,7 @@ var Onb = {
   }
 };
 
+/* ═══ الوجبات ═══ */
 var Meals = {
   add: function (meal) {
     return sb.from(CONFIG.MEALS).insert([Object.assign({ user_id: user.id }, meal)]).then(function (r) {
@@ -1041,17 +1086,17 @@ var Meals = {
       '<button class="btn btn-d" onclick="Meals.del(\'' + id + '\')"><i class="fas fa-trash"></i> حذف</button>');
   },
   del: function (id) {
-    modal('<div class="mhead"><div class="mt"><i class="fas fa-trash"></i> حذف الوجبة</div><button class="mc" onclick="closeModal()"><i class="fas fa-times"></i></button></div><p style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:20px">هل أنت متأكد من حذف هذه الوجبة؟</p><button class="btn btn-d" onclick="Meals.doDel(\'' + id + '\')">حذف</button><button class="btn btn-g" onclick="closeModal()" style="margin-top:8px">إلغاء</button>');
-  },
-  doDel: function (id) {
-    sbRun(sb.from(CONFIG.MEALS).delete().eq('id', id)).then(function () {
-      toast('تم الحذف', 'info');
-      closeModal();
-      return Db.meals();
-    }).catch(function () { toast('فشل', 'error'); });
+    confirmModal('حذف الوجبة', 'هل أنت متأكد من حذف هذه الوجبة؟', function () {
+      sbRun(sb.from(CONFIG.MEALS).delete().eq('id', id)).then(function () {
+        toast('تم الحذف', 'info');
+        closeModal();
+        return Db.meals();
+      }).catch(function () { toast('فشل الحذف', 'error'); });
+    });
   }
 };
 
+/* ═══ النقاط ═══ */
 var Points = {
   add: function (pts) {
     if (!prof) return Promise.resolve();
@@ -1078,6 +1123,7 @@ var Points = {
   }
 };
 
+/* ═══ المهام اليومية ═══ */
 var Ms = {
   render: function () {
     var today = new Date().toDateString();
@@ -1109,6 +1155,7 @@ var Ms = {
   }
 };
 
+/* ═══ النوافذ المنبثقة ═══ */
 var Modals = {
   water: function () {
     var html = '<div class="mhead"><div class="mt"><i class="fas fa-tint" style="color:#3B82F6"></i> تتبع الماء</div><button class="mc" onclick="closeModal()"><i class="fas fa-times"></i></button></div>' +
@@ -1313,11 +1360,12 @@ var Modals = {
       '<div style="text-align:center;padding:20px 0">' +
       '<div class="logo" style="width:60px;height:60px;border-radius:18px;font-size:24px;margin:0 auto 16px"><i class="fas fa-utensils"></i></div>' +
       '<h3 style="font-size:18px;font-weight:900;margin-bottom:4px">رشاقة</h3>' +
-      '<p style="color:var(--muted);font-size:13px">الإصدار 15.1.4 — النسخة العربية</p>' +
+      '<p style="color:var(--muted);font-size:13px">الإصدار 15.1.2 — النسخة العربية</p>' +
       '<p style="color:var(--muted);font-size:12px;line-height:1.8;padding:20px 0">رفيقك الذكي مع AI لتحليل الصور، ومكتبة طعام شاملة للمطبخ العربي من الخليج إلى المحيط.</p></div>');
   }
 };
 
+/* ═══ الذكاء الاصطناعي ═══ */
 var AI = {
   call: function (body) {
     return fetch(CONFIG.AI_URL, {
@@ -1487,6 +1535,7 @@ var AI = {
   }
 };
 
+/* ═══ الدردشة ═══ */
 var Chat = {
   history: [],
   STORAGE_KEY: 'rsq_chat_v2',
@@ -1515,7 +1564,7 @@ var Chat = {
     if (q) {
       var clearBtn = '<button class="btn btn-g" style="width:auto;padding:6px 12px;font-size:11px;white-space:nowrap;flex-shrink:0;border-color:rgba(239,68,68,.3);color:#EF4444" onclick="Chat.clearAll()"><i class="fas fa-trash"></i> مسح الكل</button>';
       q.innerHTML = clearBtn + quick.map(function (t) {
-        var safeT = t.replace(/'/g, ''').replace(/"/g, '"');
+        var safeT = t.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
         return '<button class="btn btn-g" style="width:auto;padding:6px 12px;font-size:11px;white-space:nowrap;flex-shrink:0" onclick="Chat.quick(\'' + safeT + '\')">' + esc(t) + '</button>';
       }).join('');
     }
@@ -1572,7 +1621,7 @@ var Chat = {
     if (idx !== null && idx !== undefined) {
       var del = document.createElement('button');
       del.className = 'msg-del';
-      del.innerHTML = '<i class="fas fa-trash-alt"></i>';
+      del.innerHTML = '<i class="fas fa-times"></i>';
       del.onclick = function () { Chat.deleteMsg(idx); };
       wrap.appendChild(del);
     }
@@ -1581,34 +1630,21 @@ var Chat = {
   },
 
   deleteMsg: function (idx) {
-    modal('<div class="mhead"><div class="mt"><i class="fas fa-trash"></i> حذف الرسالة</div><button class="mc" onclick="closeModal()"><i class="fas fa-times"></i></button></div><p style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:20px">هل أنت متأكد من حذف هذه الرسالة؟</p><button class="btn btn-d" onclick="Chat.doDelete(' + idx + ')">حذف</button><button class="btn btn-g" onclick="closeModal()" style="margin-top:8px">إلغاء</button>');
-  },
-
-  doDelete: function (idx) {
-    var wraps = document.querySelectorAll('#cmsgs .msg-wrap');
-    var targetWrap = wraps[idx];
-    if (targetWrap) {
-      targetWrap.classList.add('removing');
-      setTimeout(function () {
-        Chat.history.splice(idx, 1);
-        Chat.save();
-        Chat.renderMessages();
-      }, 300);
-    }
-    closeModal();
-    toast('تم حذف الرسالة', 'info');
+    confirmModal('حذف الرسالة', 'هل أنت متأكد من حذف هذه الرسالة؟', function () {
+      Chat.history.splice(idx, 1);
+      Chat.save();
+      Chat.renderMessages();
+      toast('تم حذف الرسالة', 'info');
+    });
   },
 
   clearAll: function () {
-    modal('<div class="mhead"><div class="mt"><i class="fas fa-trash"></i> مسح المحادثة</div><button class="mc" onclick="closeModal()"><i class="fas fa-times"></i></button></div><p style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:20px">هل أنت متأكد من مسح كل المحادثة؟</p><button class="btn btn-d" onclick="Chat.doClear()">مسح الكل</button><button class="btn btn-g" onclick="closeModal()" style="margin-top:8px">إلغاء</button>');
-  },
-
-  doClear: function () {
-    Chat.history = [];
-    localStorage.removeItem(Chat.STORAGE_KEY);
-    Chat.renderMessages();
-    closeModal();
-    toast('تم مسح المحادثة', 'info');
+    confirmModal('مسح المحادثة', 'هل أنت متأكد من مسح كل المحادثة؟', function () {
+      Chat.history = [];
+      localStorage.removeItem(Chat.STORAGE_KEY);
+      Chat.renderMessages();
+      toast('تم مسح المحادثة', 'info');
+    });
   },
 
   respond: function (q) {
@@ -1623,8 +1659,7 @@ var Chat = {
     var s = {
       name: prof && prof.username, age: prof && prof.age, gender: prof && prof.gender,
       weight: prof && prof.weight_kg, target: prof && prof.target_weight_kg,
-      goal: prof && prof.goal, targetCalories: dailyGoal, cuisine: 'arabic',
-      strictInstruction: "Answer in 3-5 lines max. Direct answer only. No long lists, no headings, no philosophical explanations. Use Arabic foods."
+      goal: prof && prof.goal, targetCalories: dailyGoal, cuisine: 'arabic'
     };
 
     AI.call({
@@ -1644,6 +1679,7 @@ var Chat = {
   }
 };
 
+/* ═══ التقارير ═══ */
 var Rpt = {
   tab: function (t, btn) {
     haptic('light');
@@ -1805,40 +1841,41 @@ var Rpt = {
   }
 };
 
+/* ═══ التمارين ═══ */
 var Ex = {
   plans: {
     lose: [
       { day: 'السبت', title: 'كارديو + مقاومة', icon: 'fa-running', color: 'linear-gradient(135deg,#EF4444,#F59E0B)', duration: '45 د', cal: 350, exercises: [
-        { name: 'جري خفيف', sets: '25 دقيقة', reps: '5.5 كم/س', icon: 'fa-running', color: 'linear-gradient(135deg,#EF4444,#EC4899)', img: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'قرفصاء', sets: '3 مجموعات', reps: '15 عدة', icon: 'fa-shoe-prints', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'تمرين الضغط', sets: '3 مجموعات', reps: '12 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#3B82F6,#8B5CF6)', img: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'تمرين البلانك', sets: '3 مجموعات', reps: '45 ثانية', icon: 'fa-hourglass-half', color: 'linear-gradient(135deg,#F59E0B,#EF4444)', img: 'https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=300&h=300&fit=crop&crop=entropy' }
+        { name: 'جري خفيف', sets: '25 دقيقة', reps: '5.5 كم/س', icon: 'fa-running', color: 'linear-gradient(135deg,#EF4444,#EC4899)', img: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=300&h=300&fit=crop' },
+        { name: 'قرفصاء', sets: '3 مجموعات', reps: '15 عدة', icon: 'fa-shoe-prints', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=300&h=300&fit=crop' },
+        { name: 'تمرين الضغط', sets: '3 مجموعات', reps: '12 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#3B82F6,#8B5CF6)', img: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=300&h=300&fit=crop' },
+        { name: 'تمرين البلانك', sets: '3 مجموعات', reps: '45 ثانية', icon: 'fa-hourglass-half', color: 'linear-gradient(135deg,#F59E0B,#EF4444)', img: 'https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=300&h=300&fit=crop' }
       ]},
       { day: 'الأحد', title: 'راحة نشطة', icon: 'fa-walking', color: 'linear-gradient(135deg,#10B981,#3B82F6)', duration: '30 دقيقة', cal: 150, exercises: [
-        { name: 'مشي سريع', sets: '20 دقيقة', reps: '4.5 كم/س', icon: 'fa-walking', color: 'linear-gradient(135deg,#10B981,#3B82F6)', img: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'يوغا وتمدد', sets: '10 دقائق', reps: 'استرخاء', icon: 'fa-spa', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=300&fit=crop&crop=entropy' }
+        { name: 'مشي سريع', sets: '20 دقيقة', reps: '4.5 كم/س', icon: 'fa-walking', color: 'linear-gradient(135deg,#10B981,#3B82F6)', img: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=300&h=300&fit=crop' },
+        { name: 'يوغا وتمدد', sets: '10 دقائق', reps: 'استرخاء', icon: 'fa-spa', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=300&fit=crop' }
       ]},
       { day: 'الاثنين', title: 'كارديو مكثف', icon: 'fa-bicycle', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', duration: '40 دقيقة', cal: 400, exercises: [
-        { name: 'الدراجة الثابتة', sets: '15 دقيقة', reps: 'مقاومة متوسطة', icon: 'fa-bicycle', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'القفز بالحبل', sets: '10 دقائق', reps: '30 ثانية قفز', icon: 'fa-heart-pulse', color: 'linear-gradient(135deg,#EF4444,#F59E0B)', img: 'https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'تمرين البيربي', sets: '3 مجموعات', reps: '10 عدة', icon: 'fa-bolt', color: 'linear-gradient(135deg,#F59E0B,#EF4444)', img: 'https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=300&h=300&fit=crop&crop=entropy' }
+        { name: 'الدراجة الثابتة', sets: '15 دقيقة', reps: 'مقاومة متوسطة', icon: 'fa-bicycle', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&h=300&fit=crop' },
+        { name: 'القفز بالحبل', sets: '10 دقائق', reps: '30 ثانية قفز', icon: 'fa-heart-pulse', color: 'linear-gradient(135deg,#EF4444,#F59E0B)', img: 'https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=300&h=300&fit=crop' },
+        { name: 'تمرين البيربي', sets: '3 مجموعات', reps: '10 عدة', icon: 'fa-bolt', color: 'linear-gradient(135deg,#F59E0B,#EF4444)', img: 'https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=300&h=300&fit=crop' }
       ]},
       { day: 'الثلاثاء', title: 'مقاومة الجزء العلوي', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#3B82F6,#8B5CF6)', duration: '50 دقيقة', cal: 300, exercises: [
-        { name: 'تمرين الضغط العادي', sets: '4 مجموعات', reps: '12 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#3B82F6,#8B5CF6)', img: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'تمرين السحب', sets: '3 مجموعات', reps: '8 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1591940742878-13aba4b7a34e?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'تمرين ضغط الأكتاف', sets: '3 مجموعات', reps: '12 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#F59E0B,#EF4444)', img: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'تمرين البلانك الجانبي', sets: '3 مجموعات', reps: '30 ثانية لكل جهة', icon: 'fa-hourglass-half', color: 'linear-gradient(135deg,#10B981,#3B82F6)', img: 'https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=300&h=300&fit=crop&crop=entropy' }
+        { name: 'تمرين الضغط العادي', sets: '4 مجموعات', reps: '12 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#3B82F6,#8B5CF6)', img: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=300&h=300&fit=crop' },
+        { name: 'تمرين السحب', sets: '3 مجموعات', reps: '8 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1591940742878-13aba4b7a34e?w=300&h=300&fit=crop' },
+        { name: 'تمرين ضغط الأكتاف', sets: '3 مجموعات', reps: '12 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#F59E0B,#EF4444)', img: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=300&h=300&fit=crop' },
+        { name: 'تمرين البلانك الجانبي', sets: '3 مجموعات', reps: '30 ثانية لكل جهة', icon: 'fa-hourglass-half', color: 'linear-gradient(135deg,#10B981,#3B82F6)', img: 'https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=300&h=300&fit=crop' }
       ]},
       { day: 'الأربعاء', title: 'يوم راحة', icon: 'fa-bed', color: 'linear-gradient(135deg,#94A3B8,#64748B)', duration: '—', cal: 0, rest: true, exercises: [] },
       { day: 'الخميس', title: 'مقاومة الجزء السفلي', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', duration: '50 دقيقة', cal: 300, exercises: [
-        { name: 'تمرين القرفصاء', sets: '4 مجموعات', reps: '15 عدة', icon: 'fa-shoe-prints', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'الرفعة الميتة', sets: '3 مجموعات', reps: '10 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#3B82F6,#8B5CF6)', img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'الطعنات', sets: '3 مجموعات', reps: '12 لكل رجل', icon: 'fa-shoe-prints', color: 'linear-gradient(135deg,#F59E0B,#EF4444)', img: 'https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'جسر المؤخرة', sets: '3 مجموعات', reps: '20 عدة', icon: 'fa-heart-pulse', color: 'linear-gradient(135deg,#10B981,#3B82F6)', img: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=300&h=300&fit=crop&crop=entropy' }
+        { name: 'تمرين القرفصاء', sets: '4 مجموعات', reps: '15 عدة', icon: 'fa-shoe-prints', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=300&h=300&fit=crop' },
+        { name: 'الرفعة الميتة', sets: '3 مجموعات', reps: '10 عدة', icon: 'fa-dumbbell', color: 'linear-gradient(135deg,#3B82F6,#8B5CF6)', img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=300&h=300&fit=crop' },
+        { name: 'الطعنات', sets: '3 مجموعات', reps: '12 لكل رجل', icon: 'fa-shoe-prints', color: 'linear-gradient(135deg,#F59E0B,#EF4444)', img: 'https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=300&h=300&fit=crop' },
+        { name: 'جسر المؤخرة', sets: '3 مجموعات', reps: '20 عدة', icon: 'fa-heart-pulse', color: 'linear-gradient(135deg,#10B981,#3B82F6)', img: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=300&h=300&fit=crop' }
       ]},
       { day: 'الجمعة', title: 'كارديو خفيف', icon: 'fa-heart-pulse', color: 'linear-gradient(135deg,#EF4444,#EC4899)', duration: '30 دقيقة', cal: 250, exercises: [
-        { name: 'مشي سريع', sets: '25 دقيقة', reps: '5 كم/س', icon: 'fa-walking', color: 'linear-gradient(135deg,#10B981,#3B82F6)', img: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=300&h=300&fit=crop&crop=entropy' },
-        { name: 'تمدد واسترخاء', sets: '5 دقائق', reps: 'استرخاء', icon: 'fa-spa', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=300&fit=crop&crop=entropy' }
+        { name: 'مشي سريع', sets: '25 دقيقة', reps: '5 كم/س', icon: 'fa-walking', color: 'linear-gradient(135deg,#10B981,#3B82F6)', img: 'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=300&h=300&fit=crop' },
+        { name: 'تمدد واسترخاء', sets: '5 دقائق', reps: 'استرخاء', icon: 'fa-spa', color: 'linear-gradient(135deg,#8B5CF6,#EC4899)', img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&h=300&fit=crop' }
       ]}
     ],
     maintain: [],
@@ -1925,7 +1962,7 @@ var Ex = {
       '<div class="ext">قائمة التمارين</div>' +
       day.exercises.map(function (e, i) {
         var dn = localStorage.getItem('ex_' + mk + '_' + idx + '_' + i) === 'done';
-        var img = e.img || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop&crop=entropy';
+        var img = e.img || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop';
         return '<div class="exc ' + (dn ? 'dn' : '') + '" onclick="Ex.toggle(' + i + ',' + idx + ',\'' + mk + '\')">' +
           '<div class="exthumb" style="background-image:url(' + img + ')">' +
             '<div style="position:absolute;inset:0;background:' + e.color + ';opacity:.55;border-radius:16px"></div>' +
@@ -1960,16 +1997,14 @@ var Ex = {
     Ex.load();
   },
   resetWeek: function () {
-    modal('<div class="mhead"><div class="mt"><i class="fas fa-undo"></i> إعادة تعيين الأسبوع</div><button class="mc" onclick="closeModal()"><i class="fas fa-times"></i></button></div><p style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:20px">هل أنت متأكد من إعادة تعيين تقدمك لهذا الأسبوع؟ سيتم مسح جميع التمارين المكتملة.</p><button class="btn btn-d" onclick="Ex.doReset()">نعم، إعادة تعيين</button><button class="btn btn-g" onclick="closeModal()" style="margin-top:8px">إلغاء</button>');
-  },
-  doReset: function () {
-    var mk = new Date().toDateString().slice(0, 7);
-    Object.keys(localStorage).forEach(function (k) {
-      if (k.indexOf('workout_' + mk) === 0 || k.indexOf('ex_' + mk) === 0) localStorage.removeItem(k);
+    confirmModal('إعادة تعيين الأسبوع', 'هل أنت متأكد من إعادة تعيين تقدمك لهذا الأسبوع؟ سيتم مسح جميع التمارين المكتملة.', function () {
+      var mk = new Date().toDateString().slice(0, 7);
+      Object.keys(localStorage).forEach(function (k) {
+        if (k.indexOf('workout_' + mk) === 0 || k.indexOf('ex_' + mk) === 0) localStorage.removeItem(k);
+      });
+      toast('تم إعادة التعيين', 'info');
+      Ex.load();
     });
-    toast('تم إعادة تعيين التقدم', 'success');
-    closeModal();
-    Ex.load();
   },
   showStats: function () {
     var mk = new Date().toDateString().slice(0, 7);
@@ -1990,7 +2025,7 @@ var Ex = {
   }
 };
 
-// Pull to refresh
+/* ═══ السحب للتحديث ═══ */
 var ps = 0, pa = false, pp = 0;
 document.body.addEventListener('touchstart', function (e) {
   if (window.scrollY === 0 && user) { ps = e.touches[0].clientY; pa = true; pp = 0; }
@@ -2037,78 +2072,9 @@ document.body.addEventListener('touchend', function () {
   pp = 0;
 }, { passive: true });
 
-// Service Worker
-if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-  try {
-    var swCode = "const C='rashaqa-v15-1-4';self.addEventListener('install',function(e){self.skipWaiting()});self.addEventListener('activate',function(e){e.waitUntil(clients.claim())});self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request).then(function(res){if(res.ok){var cl=res.clone();caches.open(C).then(function(c){c.put(e.request,cl)})}return res}).catch(function(){return caches.match('./')})}))});";
-    navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'application/javascript' }))).catch(function () {});
-  } catch (e) {}
-}
-
-// Boot
-function boot() {
-  // ✅ شبكة أمان: إظهار شاشة الدخول قسرياً بعد 3 ثوانٍ
-setTimeout(function() {
-    var auth = document.getElementById('auth');
-    var app = document.getElementById('app');
-    if (auth && auth.classList.contains('hide')) {
-        auth.classList.remove('hide');
-    }
-}, 3000);
-  
-  // ✅ الربط الصحيح للزر (يعمل في الأندرويد)
-var loginBtn = document.getElementById('loginBtn');
-if (loginBtn) {
-    var newBtn = loginBtn.cloneNode(true);
-    loginBtn.parentNode.replaceChild(newBtn, loginBtn);
-    newBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.triggerLogin();
-    });
-  }
-  console.log('🚀 Boot V15.1.4');
-  killSplash();
-  setTimeout(killSplash, 1500);
-  if (!sb) { Auth.showAuth(); return; }
-  Auth.check().finally(function () { console.log('🎉 Ready'); });
-}
-// ✅ دالة وسيطة لضمان عمل الزر في تطبيق الأندرويد
-window.triggerLogin = function() {
-    toast('✅ الزر يعمل! جاري محاولة تسجيل الدخول...', 'info');
-    
-    if (typeof sb === 'undefined' || !sb) {
-        toast('❌ خطأ: الاتصال بالخادم غير مهيأ.', 'error');
-        return;
-    }
-    
-    var emailEl = document.getElementById('email');
-    var passEl = document.getElementById('password');
-    var email = emailEl ? emailEl.value.trim() : '';
-    var pass = passEl ? passEl.value : '';
-    
-    if (!email || !pass) {
-        toast('❌ يرجى إدخال البريد وكلمة المرور.', 'error');
-        return;
-    }
-    
-    var btn = document.getElementById('loginBtn');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري...'; }
-    
-    sb.auth.signInWithPassword({ email: email, password: pass })
-      .then(function (r) {
-        if (r.error) throw r.error;
-        toast('✅ تم تسجيل الدخول بنجاح!', 'success');
-        window.user = r.data.user;
-        App.enter();
-      })
-      .catch(function (e) { 
-        toast('❌ فشل الدخول: ' + (e.message || 'بيانات خاطئة'), 'error'); 
-      })
-      .finally(function () { 
-        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول'; }
-      });
-};  
-
+/* ═══════════════════════════════════════════════════════════
+   ربط جميع الدوال بـ window قبل التشغيل
+   ═══════════════════════════════════════════════════════════ */
 window.Nav = Nav;
 window.Auth = Auth;
 window.Onb = Onb;
@@ -2124,17 +2090,63 @@ window.ActivityPicker = ActivityPicker;
 window.closeModal = closeModal;
 window.toast = toast;
 
+/* ═══ تشغيل التطبيق ═══ */
+function boot() {
+  console.log('🚀 Boot V15.1.2');
+  killSplash();
+  setTimeout(killSplash, 1500);
+
+  // ✅ ربط زر تسجيل الدخول بـ addEventListener (موثوق في الأندرويد)
+  var loginBtn = document.getElementById('loginBtn');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      Auth.login();
+    });
+  }
+
+  // ✅ ربط زر إنشاء الحساب
+  var registerBtn = document.getElementById('registerBtn');
+  if (registerBtn) {
+    registerBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      Auth.register();
+    });
+  }
+
+  // ✅ شبكة أمان: إظهار شاشة الدخول قسرياً بعد 3 ثوانٍ
+  setTimeout(function () {
+    var auth = document.getElementById('auth');
+    var app = document.getElementById('app');
+    var onb = document.getElementById('onb');
+    if (auth && auth.classList.contains('hide') && (!app || app.classList.contains('hide')) && (!onb || onb.classList.contains('hide'))) {
+      console.warn('⚠️ شاشة الدخول لم تظهر قسرياً، إجبارها الآن');
+      if (auth) auth.classList.remove('hide');
+    }
+  }, 3000);
+
+  if (!sb) { Auth.showAuth(); return; }
+  Auth.check().finally(function () { console.log('🎉 Ready'); });
+}
+
+// تشغيل boot عند اكتمال تحميل DOM
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
-} else boot();
+} else {
+  boot();
+}
 
 window.onerror = function (m, s, l, c, e) {
   console.error('❌ Error:', m, 'at', s, l + ':' + c);
   killSplash();
+  var auth = document.getElementById('auth');
+  var app = document.getElementById('app');
+  if (auth) auth.classList.remove('hide');
+  if (app) app.classList.add('hide');
   return true;
 };
 
-console.log('%c💎 رشاقة V15.1.4 — Surgical Edits Build', 'color:#8B5CF6;font-weight:900;font-size:14px;padding:8px;background:#F5F3FF;border-radius:8px');
+console.log('%c💎 رشاقة V15.1.2 — Android Ready Build', 'color:#8B5CF6;font-weight:900;font-size:14px;padding:8px;background:#F5F3FF;border-radius:8px');
 </script>
 </body>
 </html>

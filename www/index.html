@@ -358,28 +358,14 @@ header{padding:20px 20px 16px;display:flex;justify-content:space-between;align-i
         <div class="inp-g"><label>الوزن (كغ)</label><input type="number" id="obW" placeholder="80"></div>
       </div>
       <div class="inp-g">
-        <label>البلد (لتخصيص الأطعمة)</label>
-        <select id="obCountry" class="inp">
-          <option value="MA">🇲🇦 المغرب</option>
-          <option value="DZ">🇩🇿 الجزائر</option>
-          <option value="TN">🇹🇳 تونس</option>
-          <option value="EG">🇪🇬 مصر</option>
-          <option value="SA">🇸🇦 السعودية</option>
-          <option value="AE">🇦🇪 الإمارات</option>
-          <option value="KW">🇰🇼 الكويت</option>
-          <option value="QA">🇶🇦 قطر</option>
-          <option value="BH">🇧🇭 البحرين</option>
-          <option value="OM">🇴🇲 عمان</option>
-          <option value="YE">🇾🇪 اليمن</option>
-          <option value="JO">🇯🇴 الأردن</option>
-          <option value="LB">🇱🇧 لبنان</option>
-          <option value="SY">🇸🇾 سوريا</option>
-          <option value="PS">🇵🇸 فلسطين</option>
-          <option value="IQ">🇮🇶 العراق</option>
-          <option value="SD">🇸🇩 السودان</option>
-          <option value="LY">🇱🇾 ليبيا</option>
-        </select>
-      </div>
+  <label>البلد (لتخصيص الأطعمة)</label>
+  <button type="button" class="inp" id="countryBtn" style="text-align:right;display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:rgba(15,23,42,.6);border:1px solid var(--border);color:#fff;padding:16px;border-radius:14px;font-size:15px;font-family:'Tajawal',sans-serif">
+    <span id="countryLabel">🇲🇦 المغرب</span>
+    <i class="fas fa-chevron-down" style="font-size:12px;color:var(--muted)"></i>
+  </button>
+  <input type="hidden" id="obCountry" value="MA">
+</div>
+        
       <div class="inp-g">
         <label>مستوى النشاط</label>
         <input type="hidden" id="obAct" value="1.375">
@@ -886,7 +872,11 @@ var Onb = {
     $('obW').value = prof.weight_kg;
     $('obAct').value = prof.activity_level;
     $('obTW').value = prof.target_weight_kg || '';
-    if ($('obCountry') && prof.country) $('obCountry').value = prof.country;
+    if ($('obCountry') && prof.country) {
+  $('obCountry').value = prof.country;
+  var cn = { MA: '🇲🇦 المغرب', DZ: '🇩🇿 الجزائر', TN: '🇹🇳 تونس', EG: '🇪🇬 مصر', SA: '🇸🇦 السعودية', AE: '🇦🇪 الإمارات', KW: '🇰🇼 الكويت', QA: '🇶🇦 قطر', BH: '🇧🇭 البحرين', OM: '🇴🇲 عمان', YE: '🇾🇪 اليمن', JO: '🇯🇴 الأردن', LB: '🇱🇧 لبنان', SY: '🇸🇾 سوريا', PS: '🇵🇸 فلسطين', IQ: '🇮🇶 العراق', SD: '🇸🇩 السودان', LY: '🇱🇾 ليبيا' };
+  if ($('countryLabel')) $('countryLabel').textContent = cn[prof.country] || '🇲🇦 المغرب';
+}
     Onb.start(); Onb.pick(prof.goal); Onb.next(); ActivityPicker.render();
     var cl = $('onbClose'); if (cl) cl.style.display = 'flex';
   },
@@ -1533,6 +1523,34 @@ var Ex = {
     modal('<div class="mhead"><div class="mt"><i class="fas fa-chart-bar"></i> إحصائيات</div><button class="mc" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="agrid3" style="grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"><div class="ai2" style="padding:16px"><div class="aiv" style="font-size:24px">' + dc + '</div><div class="ail">مكتملة</div></div><div class="ai2" style="padding:16px"><div class="aiv" style="font-size:24px">' + tc + '</div><div class="ail">سعرة</div></div><div class="ai2" style="padding:16px"><div class="aiv" style="font-size:24px">' + Math.round((dc / 7) * 100) + '%</div><div class="ail">الالتزام</div></div><div class="ai2" style="padding:16px"><div class="aiv" style="font-size:24px">' + (7 - dc) + '</div><div class="ail">متبقي</div></div></div><button class="btn" onclick="closeModal()">تم</button>');
   }
 };
+  
+function openCountryPicker() {
+  var countries = [
+    { v: 'MA', n: 'المغرب', e: '🇲🇦' }, { v: 'DZ', n: 'الجزائر', e: '🇩🇿' },
+    { v: 'TN', n: 'تونس', e: '🇹🇳' }, { v: 'EG', n: 'مصر', e: '🇪🇬' },
+    { v: 'SA', n: 'السعودية', e: '🇸🇦' }, { v: 'AE', n: 'الإمارات', e: '🇦🇪' },
+    { v: 'KW', n: 'الكويت', e: '🇰🇼' }, { v: 'QA', n: 'قطر', e: '🇶🇦' },
+    { v: 'BH', n: 'البحرين', e: '🇧🇭' }, { v: 'OM', n: 'عمان', e: '🇴🇲' },
+    { v: 'YE', n: 'اليمن', e: '🇾🇪' }, { v: 'JO', n: 'الأردن', e: '🇯🇴' },
+    { v: 'LB', n: 'لبنان', e: '🇱🇧' }, { v: 'SY', n: 'سوريا', e: '🇸🇾' },
+    { v: 'PS', n: 'فلسطين', e: '🇵🇸' }, { v: 'IQ', n: 'العراق', e: '🇮🇶' },
+    { v: 'SD', n: 'السودان', e: '🇸🇩' }, { v: 'LY', n: 'ليبيا', e: '🇱🇾' }
+  ];
+  var current = document.getElementById('obCountry').value;
+  var html = '<div class="mhead"><div class="mt"><i class="fas fa-globe"></i> اختر بلدك</div><button class="mc" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div style="max-height:60vh;overflow-y:auto;padding-bottom:10px">';
+  countries.forEach(function (c) {
+    var on = c.v === current;
+    html += '<div onclick="pickCountry(\'' + c.v + '\',\'' + c.n + '\',\'' + c.e + '\')" style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-radius:12px;margin-bottom:6px;cursor:pointer;background:' + (on ? 'rgba(139,92,246,.15)' : 'rgba(255,255,255,.03)') + ';border:1px solid ' + (on ? 'var(--primary)' : 'transparent') + '"><span style="font-size:15px;font-weight:700">' + c.e + ' ' + c.n + '</span>' + (on ? '<i class="fas fa-check-circle" style="color:var(--primary)"></i>' : '') + '</div>';
+  });
+  html += '</div>';
+  modal(html);
+}
+
+function pickCountry(code, name, flag) {
+  document.getElementById('obCountry').value = code;
+  document.getElementById('countryLabel').textContent = flag + ' ' + name;
+  closeModal();
+}
 
 window.Nav = Nav; window.Auth = Auth; window.Onb = Onb; window.Meals = Meals; window.Modals = Modals;
 window.AI = AI; window.Chat = Chat; window.Rpt = Rpt; window.Ex = Ex; window.Points = Points; window.Ms = Ms;
@@ -1546,6 +1564,8 @@ function boot() {
   if (loginBtn) loginBtn.addEventListener('click', function (e) { e.preventDefault(); Auth.login(); });
   var registerBtn = document.getElementById('registerBtn');
   if (registerBtn) registerBtn.addEventListener('click', function (e) { e.preventDefault(); Auth.register(); });
+  var countryBtn = document.getElementById('countryBtn');
+if (countryBtn) countryBtn.addEventListener('click', function (e) { e.preventDefault(); openCountryPicker(); });
   setTimeout(function () {
     var auth = document.getElementById('auth');
     var app = document.getElementById('app');
